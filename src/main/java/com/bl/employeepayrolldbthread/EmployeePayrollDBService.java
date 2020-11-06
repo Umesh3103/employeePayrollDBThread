@@ -18,7 +18,8 @@ public class EmployeePayrollDBService {
 
 	private PreparedStatement employeePayrollDataStatement;
 	private static EmployeePayrollDBService employeePayrollDBService;
-
+	private int connectionCounter=0;
+	
 	private EmployeePayrollDBService() {
 
 	}
@@ -36,13 +37,14 @@ public class EmployeePayrollDBService {
 	}
 
 	private Connection getConnection() throws SQLException {
+		connectionCounter++;
 		String jdbcURL = "jdbc:mysql://localhost:3306/payroll_service?useSSL=false";
 		String userName = "root";
 		String password = "root";
 		Connection con;
-		System.out.println("Connecting to database:" + jdbcURL);
+		System.out.println("Processing Thread: "+ Thread.currentThread().getName()+" Connecting to database with Id:" + connectionCounter);
 		con = DriverManager.getConnection(jdbcURL, userName, password);
-		System.out.println("Connection is successful!!!" + con);
+		System.out.println("Processing Thread: "+ Thread.currentThread().getName()+ " Id: "+connectionCounter+"Connection is successful!!!" + con);
 		return con;
 	}
 
