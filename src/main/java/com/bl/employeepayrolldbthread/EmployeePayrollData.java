@@ -2,6 +2,7 @@ package com.bl.employeepayrolldbthread;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 public class EmployeePayrollData {
 
@@ -43,6 +44,11 @@ public class EmployeePayrollData {
 				+ ", companyId=" + companyId + ", department=" + department + "]";
 	}
 
+	@Override
+	public int hashCode(){
+		return Objects.hash(name,gender,salary,startDate, companyId, department);
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
