@@ -56,7 +56,7 @@ public class EmployeePayrollDBService {
 			Statement statement = connection.createStatement();
 			return statement.executeUpdate(sql);
 		} catch (SQLException e) {
-			throw new employeePayrollException(e.getMessage(),employeePayrollException.ExceptionType.DB_PROBLEM);
+			throw new employeePayrollException(e.getMessage(), employeePayrollException.ExceptionType.DB_PROBLEM);
 		}
 	}
 
@@ -70,7 +70,7 @@ public class EmployeePayrollDBService {
 			ResultSet resultSet = employeePayrollDataStatement.executeQuery();
 			employeePayrollList = this.getEmployeePayrollData(resultSet);
 		} catch (SQLException e) {
-			throw new employeePayrollException(e.getMessage(),employeePayrollException.ExceptionType.DB_PROBLEM);
+			throw new employeePayrollException(e.getMessage(), employeePayrollException.ExceptionType.DB_PROBLEM);
 		}
 		return employeePayrollList;
 	}
@@ -88,7 +88,7 @@ public class EmployeePayrollDBService {
 				employeePayrollList.add(new EmployeePayrollData(id, name, salary, startDate, companyId, deptName));
 			}
 		} catch (SQLException e) {
-			throw new employeePayrollException(e.getMessage(),employeePayrollException.ExceptionType.DB_PROBLEM);
+			throw new employeePayrollException(e.getMessage(), employeePayrollException.ExceptionType.DB_PROBLEM);
 		}
 		return employeePayrollList;
 	}
@@ -100,11 +100,12 @@ public class EmployeePayrollDBService {
 			employeePayrollDataStatement = connection.prepareStatement(sql);
 
 		} catch (SQLException e) {
-			throw new employeePayrollException(e.getMessage(),employeePayrollException.ExceptionType.DB_PROBLEM);
+			throw new employeePayrollException(e.getMessage(), employeePayrollException.ExceptionType.DB_PROBLEM);
 		}
 	}
 
-	public List<EmployeePayrollData> getEmployeePayrollForDateRange(LocalDate startDate, LocalDate endDate) throws employeePayrollException {
+	public List<EmployeePayrollData> getEmployeePayrollForDateRange(LocalDate startDate, LocalDate endDate)
+			throws employeePayrollException {
 		String sql = String.format("SELECT * FROM employee_payroll_table WHERE start BETWEEN '%s' AND '%s';",
 				Date.valueOf(startDate), Date.valueOf(endDate));
 		return this.getEmployeePayrollDataUsingDB(sql);
@@ -118,7 +119,7 @@ public class EmployeePayrollDBService {
 			ResultSet resultSet = statement.executeQuery(sql);
 			employeePayrollList = this.getEmployeePayrollData(resultSet);
 		} catch (SQLException e) {
-			throw new employeePayrollException(e.getMessage(),employeePayrollException.ExceptionType.DB_PROBLEM);
+			throw new employeePayrollException(e.getMessage(), employeePayrollException.ExceptionType.DB_PROBLEM);
 		}
 		return employeePayrollList;
 	}
@@ -135,12 +136,13 @@ public class EmployeePayrollDBService {
 				genderToAverageSalaryMap.put(gender, salary);
 			}
 		} catch (SQLException e) {
-			throw new employeePayrollException(e.getMessage(),employeePayrollException.ExceptionType.DB_PROBLEM);
+			throw new employeePayrollException(e.getMessage(), employeePayrollException.ExceptionType.DB_PROBLEM);
 		}
 		return genderToAverageSalaryMap;
 	}
 
-	public EmployeePayrollData addEmployeeToPayrollUC7(String name, double salary, LocalDate startDate, String gender) throws employeePayrollException {
+	public EmployeePayrollData addEmployeeToPayrollUC7(String name, double salary, LocalDate startDate, String gender)
+			throws employeePayrollException {
 		int employeeId = -1;
 		EmployeePayrollData employeePayrolldata = null;
 		String sql = String.format(
@@ -156,7 +158,7 @@ public class EmployeePayrollDBService {
 			}
 			employeePayrolldata = new EmployeePayrollData(employeeId, name, salary, startDate);
 		} catch (SQLException e) {
-			throw new employeePayrollException(e.getMessage(),employeePayrollException.ExceptionType.DB_PROBLEM);
+			throw new employeePayrollException(e.getMessage(), employeePayrollException.ExceptionType.DB_PROBLEM);
 		}
 		return employeePayrolldata;
 	}
@@ -170,7 +172,7 @@ public class EmployeePayrollDBService {
 			connection = this.getConnection();
 			connection.setAutoCommit(false);
 		} catch (SQLException e) {
-			throw new employeePayrollException(e.getMessage(),employeePayrollException.ExceptionType.DB_PROBLEM);
+			throw new employeePayrollException(e.getMessage(), employeePayrollException.ExceptionType.DB_PROBLEM);
 		}
 
 		try (Statement statement = connection.createStatement()) {
@@ -189,7 +191,7 @@ public class EmployeePayrollDBService {
 				connection.rollback();
 				return employeePayrolldata;
 			} catch (SQLException e1) {
-				throw new employeePayrollException(e.getMessage(),employeePayrollException.ExceptionType.DB_PROBLEM);
+				throw new employeePayrollException(e.getMessage(), employeePayrollException.ExceptionType.DB_PROBLEM);
 			}
 		}
 
@@ -210,7 +212,7 @@ public class EmployeePayrollDBService {
 			try {
 				connection.rollback();
 			} catch (SQLException e1) {
-				throw new employeePayrollException(e.getMessage(),employeePayrollException.ExceptionType.DB_PROBLEM);
+				throw new employeePayrollException(e.getMessage(), employeePayrollException.ExceptionType.DB_PROBLEM);
 			}
 		}
 		try {
@@ -222,7 +224,8 @@ public class EmployeePayrollDBService {
 				try {
 					connection.close();
 				} catch (SQLException e) {
-					throw new employeePayrollException(e.getMessage(),employeePayrollException.ExceptionType.DB_PROBLEM);
+					throw new employeePayrollException(e.getMessage(),
+							employeePayrollException.ExceptionType.DB_PROBLEM);
 				}
 			}
 		}
@@ -230,12 +233,13 @@ public class EmployeePayrollDBService {
 	}
 
 	public int removeEmployeeFromPayrollDB(String name, int is_active) throws employeePayrollException {
-		String sql = String.format("update employee_payroll_table set is_active = %d where name = '%s'", is_active, name);
+		String sql = String.format("update employee_payroll_table set is_active = %d where name = '%s'", is_active,
+				name);
 		try (Connection connection = this.getConnection()) {
 			Statement statement = connection.createStatement();
 			return statement.executeUpdate(sql);
 		} catch (SQLException e) {
-			throw new employeePayrollException(e.getMessage(),employeePayrollException.ExceptionType.DB_PROBLEM);
+			throw new employeePayrollException(e.getMessage(), employeePayrollException.ExceptionType.DB_PROBLEM);
 		}
 	}
 
@@ -248,7 +252,7 @@ public class EmployeePayrollDBService {
 			connection = this.getConnection();
 			connection.setAutoCommit(false);
 		} catch (SQLException e) {
-			throw new employeePayrollException(e.getMessage(),employeePayrollException.ExceptionType.DB_PROBLEM);
+			throw new employeePayrollException(e.getMessage(), employeePayrollException.ExceptionType.DB_PROBLEM);
 		}
 
 		try (Statement statement = connection.createStatement()) {
@@ -267,7 +271,7 @@ public class EmployeePayrollDBService {
 				connection.rollback();
 				return employeePayrolldata;
 			} catch (SQLException e1) {
-				throw new employeePayrollException(e.getMessage(),employeePayrollException.ExceptionType.DB_PROBLEM);
+				throw new employeePayrollException(e.getMessage(), employeePayrollException.ExceptionType.DB_PROBLEM);
 			}
 		}
 
@@ -287,7 +291,7 @@ public class EmployeePayrollDBService {
 			try {
 				connection.rollback();
 			} catch (SQLException e1) {
-				throw new employeePayrollException(e.getMessage(),employeePayrollException.ExceptionType.DB_PROBLEM);
+				throw new employeePayrollException(e.getMessage(), employeePayrollException.ExceptionType.DB_PROBLEM);
 			}
 		}
 		try {
@@ -299,7 +303,8 @@ public class EmployeePayrollDBService {
 				try {
 					connection.close();
 				} catch (SQLException e) {
-					throw new employeePayrollException(e.getMessage(),employeePayrollException.ExceptionType.DB_PROBLEM);
+					throw new employeePayrollException(e.getMessage(),
+							employeePayrollException.ExceptionType.DB_PROBLEM);
 				}
 			}
 		}

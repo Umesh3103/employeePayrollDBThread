@@ -118,10 +118,10 @@ public class EmployeePayrollService {
 	}
 
 	public int removeEmployeeFromPayroll(String name, int is_active) throws employeePayrollException {
-		int result = employeePayrollDBService.removeEmployeeFromPayrollDB(name,is_active);
-		if(result==1){
-			for(EmployeePayrollData employee :employeePayrollList){
-				if(employee.name.equals(name)){
+		int result = employeePayrollDBService.removeEmployeeFromPayrollDB(name, is_active);
+		if (result == 1) {
+			for (EmployeePayrollData employee : employeePayrollList) {
+				if (employee.name.equals(name)) {
 					employeePayrollList.remove(employee);
 					break;
 				}
@@ -132,19 +132,21 @@ public class EmployeePayrollService {
 
 	public void addEmployeesToPayrollThread(List<EmployeePayrollData> employeePayrollDataList) {
 		employeePayrollDataList.forEach(employeePayrollData -> {
-			System.out.println("Employee being Added:"+ employeePayrollData.name);
+			System.out.println("Employee being Added:" + employeePayrollData.name);
 			try {
-				this.addEmployeeToPayroll(employeePayrollData.name,employeePayrollData.salary, employeePayrollData.startDate, employeePayrollData.gender,employeePayrollData.companyId, employeePayrollData.department);
+				this.addEmployeeToPayroll(employeePayrollData.name, employeePayrollData.salary,
+						employeePayrollData.startDate, employeePayrollData.gender, employeePayrollData.companyId,
+						employeePayrollData.department);
 			} catch (employeePayrollException e) {
 			}
-			System.out.println("Employee Added:"+employeePayrollData.name);
+			System.out.println("Employee Added:" + employeePayrollData.name);
 		});
 		System.out.println(this.employeePayrollList);
 	}
 
 	private void addEmployeeToPayroll(String name, double salary, LocalDate startDate, String gender, int companyId,
 			String department) throws employeePayrollException {
-		employeePayrollList.add(
-				employeePayrollDBService.addEmployeeToPayrollThread(name, salary, startDate, gender, companyId, department));
+		employeePayrollList.add(employeePayrollDBService.addEmployeeToPayrollThread(name, salary, startDate, gender,
+				companyId, department));
 	}
 }
