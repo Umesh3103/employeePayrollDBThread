@@ -152,4 +152,13 @@ public class EmployeePayrollServiceTest {
 		int statusCode = response.getStatusCode();
 		Assert.assertEquals(200, statusCode);
 	}
+	
+	@Test
+	public void givenEmployeeDataInJsonServer_WhenRetrieved_ShouldMatchTheCount(){
+		EmployeePayrollService employeePayrollService;
+		EmployeePayrollData[] arrayOfEmps = getEmployeeList();
+		employeePayrollService = new EmployeePayrollService(Arrays.asList(arrayOfEmps));
+		long entries = employeePayrollService.countEntries(IOService.REST_IO);
+		Assert.assertEquals(6, entries);
+	}
 }
