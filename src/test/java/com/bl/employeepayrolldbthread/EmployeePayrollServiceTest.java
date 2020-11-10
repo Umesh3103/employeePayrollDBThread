@@ -104,5 +104,32 @@ public class EmployeePayrollServiceTest {
 			Assert.assertEquals(3, entries);
 		} catch (employeePayrollException e) {
 		}
-	}	
+	}
+	
+	@Test
+	public void givenListOfNewEmployee_WhenAdded_ShouldMatch201ResponseCount(){
+		EmployeePayrollService employeePayrollService;
+		EmployeePayrollData[] arrayOfEmps  = getEmployeeList();
+		employeePayrollService = new EmployeePayrollService(Arrays.asList(arrayOfEmps));
+		
+		EmployeePayrollData[] arrayOfEmpPayrolls = {
+				new EmployeePayrollData(0,"Sunder", "M", 600000.00, LocalDate.now()),
+				new EmployeePayrollData(0,"Mukesh", "M", 1000000.00, LocalDate.now()),
+				new EmployeePayrollData(0,"Anil", "M", 200000.00, LocalDate.now())
+		};
+		
+		for(EmployeePayrollData employeePayrollData: arrayOfEmpPayrolls){
+			Response response = addEmployeeToJsonServer(employeePayrollData);
+			int statusCode = response.getStatusCode();
+			Assert.assertEquals(201, statusCode);
+			
+			employeePayrollData = new Gson().fromJson(response.asString(), EmployeePayrollData.class);
+			try {
+				employeePayrollService.addEmployeeToPayroll(employeePayrollData, IOService.REST_IO);
+			} catch (employeePayrollException e) {
+			}
+		}
+		long entries = employeePayrollService.countEntries(IOService.REST_IO);
+		Assert.assertEquals(6, entries);
+	}
 }
