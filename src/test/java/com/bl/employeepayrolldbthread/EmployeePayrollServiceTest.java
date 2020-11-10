@@ -10,9 +10,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.bl.employeepayrolldbthread.EmployeePayrollService.IOService;
+import com.google.gson.Gson;
+
+import io.restassured.RestAssured;
+import io.restassured.mapper.ObjectMapper;
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 
 public class EmployeePayrollServiceTest {
 
@@ -58,4 +65,36 @@ public class EmployeePayrollServiceTest {
 		} catch (employeePayrollException e) {
 		}
 	}
+	
+	@Before
+	public void setup(){
+		RestAssured.baseURI = "http://localhost";
+		RestAssured.port=3000;
+	}
+	private Response addEmployeeToJsonServer(EmployeePayrollData employeePayrollData) {
+		String empJson = new Gson().toJson(employeePayrollData);
+		RequestSpecification request =RestAssured.given();
+		request.header("Content-Type", "application/json");
+		request.body(empJson);
+		return request.post("/employee_payroll");
+	}
+
+	private EmployeePayrollData[] getEmployeeList() {
+		Response response = RestAssured.get("/employee_payroll");
+		System.out.println("EMPLOYEE PAYROLL ENTRIES IN JSONserver: \n" +response.asString());
+		EmployeePayrollData[] arrayOfEmps = new Gson().fromJson(response.asString(), EmployeePayrollData[].class);
+		return arrayOfEmps;
+	}
+	
+	@Test
+	public void givenNewEmployee_WhenAdded_ShouldMatch201Response(){
+		EmployeePayrollService employeePayrollService;
+		EmployeePayrollData[] arrayOfEmps  = getEmployeeList();
+		employeePayrollService = new EmployeePayrollService(Arrays.asList(arrayOfEmps));
+		EmployeePayrollData employeePayrollData = null;
+		employeePayrollData = new EmployeePayrollData(0,"Mark Zuckerberg", "M", 300000.00, LocalDate.now());
+		Response response = addEmployeeToJsonServer(employeePayrollData);
+		int statusCode = response.getStatusCode();
+		Assert.assertEquals(201, statusCode);
+	}	
 }

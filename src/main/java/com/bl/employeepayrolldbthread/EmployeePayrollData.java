@@ -4,16 +4,20 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 public class EmployeePayrollData {
 
 	int id;
 	String name;
+	public String gender;
 	double salary;
 	public LocalDate startDate;
-	public int companyId;
 	public String department;
-	public String gender;
-
+	public Integer companyId;
+	
 	public EmployeePayrollData(int id, String name, double salary) {
 		super();
 		this.id = id;
@@ -26,6 +30,11 @@ public class EmployeePayrollData {
 		this.startDate = startDate;
 	}
 
+	public EmployeePayrollData(int id, String name, String gender, double salary, LocalDate startDate) {
+		this(id, name, salary,startDate);
+		this.gender=gender;
+	}
+	
 	public EmployeePayrollData(int id, String name, double salary, LocalDate startDate, int companyId, String department){
 		this(id,name,salary,startDate);
 		this.companyId = companyId;
@@ -40,13 +49,13 @@ public class EmployeePayrollData {
 
 	@Override
 	public String toString() {
-		return "EmployeePayrollData [id=" + id + ", name=" + name + ", salary=" + salary + ", startDate=" + startDate
-				+ ", companyId=" + companyId + ", department=" + department + "]";
+		return "EmployeePayrollData [id=" + id + ", name=" + name + ", gender=" +gender + ", salary=" + salary + ", startDate=" + startDate
+				+ "]";
 	}
 
 	@Override
 	public int hashCode(){
-		return Objects.hash(name,gender,salary,startDate, companyId, department);
+		return Objects.hash(id,name,gender,salary,startDate);
 	}
 	
 	@Override
