@@ -175,4 +175,10 @@ public class EmployeePayrollService {
 		}
 		System.out.println(employeePayrollDataList);
 	}
+	
+	public void addEmployeeToPayroll(EmployeePayrollData employeePayrollData, IOService ioService) throws employeePayrollException{
+		if(ioService.equals(IOService.DB_IO))
+			this.addEmployeeToPayroll(employeePayrollData.name, employeePayrollData.salary, employeePayrollData.startDate, employeePayrollData.gender, employeePayrollData.companyId, employeePayrollData.department);
+		else employeePayrollList.add(employeePayrollData);
+	}
 }
