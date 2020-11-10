@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import com.bl.employeepayrolldbthread.EmployeePayrollService.IOService;
+
 public class EmployeePayrollService {
 	public enum IOService {
 		CONSOLE_IO, FILE_IO, DB_IO, REST_IO
@@ -183,5 +185,12 @@ public class EmployeePayrollService {
 		if(ioService.equals(IOService.DB_IO))
 			this.addEmployeeToPayroll(employeePayrollData.name, employeePayrollData.salary, employeePayrollData.startDate, employeePayrollData.gender, employeePayrollData.companyId, employeePayrollData.department);
 		else employeePayrollList.add(employeePayrollData);
+	}
+
+	public void deleteEmployeePayroll(String name, IOService ioService) {
+		if(ioService.equals(IOService.REST_IO)){
+			EmployeePayrollData employeePayrollData = this.getEmployeePayrollData(name);
+			employeePayrollList.remove(employeePayrollData);
+		}
 	}
 }
