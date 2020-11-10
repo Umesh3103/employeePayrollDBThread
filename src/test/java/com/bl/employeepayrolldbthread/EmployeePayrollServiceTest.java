@@ -96,5 +96,13 @@ public class EmployeePayrollServiceTest {
 		Response response = addEmployeeToJsonServer(employeePayrollData);
 		int statusCode = response.getStatusCode();
 		Assert.assertEquals(201, statusCode);
+		
+		employeePayrollData = new Gson().fromJson(response.asString(), EmployeePayrollData.class);
+		try {
+			employeePayrollService.addEmployeeToPayroll(employeePayrollData, IOService.REST_IO);
+			long entries = employeePayrollService.countEntries(IOService.REST_IO);
+			Assert.assertEquals(3, entries);
+		} catch (employeePayrollException e) {
+		}
 	}	
 }
